@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MBTI 16 型人格冒險學院｜課堂掃碼海報</title>
+<meta name="description" content="80 題冒險挑戰・探索你的專屬角色。A4 列印掃碼海報。">
+<style>
+:root{--night:#0b1430;--mid:#1c284b;--gold:#e8cb83;--gold2:#b48b51;--paper:#fffaf0}
+*{box-sizing:border-box}body{margin:0;background:#1a2237;color:#f8edce;font-family:"Noto Serif TC","Songti TC","PMingLiU",serif;}
+.toolbar{font-family:system-ui,sans-serif;display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;padding:17px;background:#0a1024}
+.toolbar a,.toolbar button{font:600 14px system-ui,sans-serif;text-decoration:none;color:#2b2540;padding:12px 21px;border:1px solid #e6bd6c;border-radius:99px;background:linear-gradient(135deg,#fff2c4,#e5bf77);cursor:pointer}
+.toolbar a:hover,.toolbar button:hover{filter:brightness(1.06)}.toolbar span{color:#e5dfcc;font-size:13px}
+.poster{position:relative;isolation:isolate;width:min(100%,794px);aspect-ratio:210/297;margin:26px auto 40px;overflow:hidden;background:radial-gradient(ellipse at 50% 39%,#34496b 0%,#152341 34%,#0b142c 72%),var(--night);border:11px ridge #b99551;box-shadow:0 20px 55px #0009;}
+.poster:before{content:"";position:absolute;inset:1.6%;border:2px solid #bfa36c;outline:1px solid #866c42;outline-offset:6px;pointer-events:none;z-index:6}
+.poster:after{content:"";position:absolute;inset:3.1%;border:1px solid #aa8d5a66;pointer-events:none;z-index:6}
+.stars{position:absolute;inset:0;background-image:radial-gradient(#fff0c7 0.85px,transparent 1.4px),radial-gradient(#9ac9ec 0.8px,transparent 1.3px);background-size:63px 71px,107px 83px;background-position:5px 19px,26px 10px;opacity:.46}
+.academy{position:absolute;top:5%;left:8%;right:8%;text-align:center;color:var(--gold);font:700 clamp(8px,1.4vw,15px) Georgia,serif;letter-spacing:.35em;}
+.title{position:absolute;top:10.6%;left:5%;right:5%;text-align:center;line-height:1.22;text-shadow:0 5px 20px #04091b;z-index:4}
+.title h1{font-weight:900;margin:0;color:#ffe7a6;font-size:clamp(24px,5.4vw,54px);letter-spacing:.035em;}
+.title p{font-size:clamp(11px,2.25vw,21px);letter-spacing:.12em;color:#fbf0d5;font-weight:600;margin:2.8% 0 0;}
+.rule{width:56%;height:1px;margin:3% auto 0;background:linear-gradient(90deg,transparent,var(--gold),transparent);position:relative}.rule:after{content:"✦";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#263751;padding:0 12px;color:#f5d491}
+.figure{position:absolute;overflow:hidden;border:3px solid #d8bc7b;box-shadow:0 0 0 5px #413a3d,0 10px 26px #020414a9;z-index:3;background:#252f4a;}
+.figure img{width:100%;height:100%;object-fit:cover;display:block}
+.figure.enfp{left:7%;top:28%;width:24%;height:29%;border-radius:48% 48% 13% 13%;transform:rotate(-5deg)}
+.figure.intj{right:7%;top:28%;width:24%;height:29%;border-radius:48% 48% 13% 13%;transform:rotate(5deg)}
+.figure.enfp img{object-position:53% 28%}.figure.intj img{object-position:48% 25%}
+.type-label{position:absolute;bottom:1.5%;left:2%;right:2%;background:#09142ceb;padding:4% 0;text-align:center;border:1px solid #d3b374;color:#fce8b4;font:700 clamp(8px,1.6vw,16px) system-ui,sans-serif;letter-spacing:.04em}
+.mini{position:absolute;width:15%;aspect-ratio:1;border:4px double #e4cd93;border-radius:50%;overflow:hidden;box-shadow:0 0 0 4px #1b2b4c,0 8px 22px #0009;z-index:4}
+.mini img{width:100%;height:100%;object-fit:cover;object-position:50% 18%;transform:scale(1.3)}
+.mini.e{left:9%;top:69%;transform:rotate(-9deg)}.mini.i{right:9%;top:69%;transform:rotate(9deg)}
+.glyph{position:absolute;color:#e8cd91aa;text-shadow:0 0 25px #ffe4ad;z-index:2}
+.g1{left:12%;top:20%;font-size:clamp(20px,4vw,39px)}.g2{right:12%;top:20%;font-size:clamp(20px,4vw,39px)}.g3{left:11%;top:60%;font-size:clamp(20px,4vw,39px)}.g4{right:11%;top:60%;font-size:clamp(20px,4vw,39px)}
+.center{position:absolute;left:24%;right:24%;top:34%;z-index:5;text-align:center;}
+.qr-frame{background:white;border:8px solid #fff;border-radius:10px;box-shadow:0 0 0 4px #e4c885,0 0 0 9px #4e4662,0 10px 35px #0009;aspect-ratio:1;padding:4%}
+.qr-frame img{width:100%;height:100%;display:block;image-rendering:pixelated;object-fit:contain}
+.callout{font-weight:900;color:#ffe2a5;font-size:clamp(13px,2.35vw,23px);margin-top:12%;text-shadow:0 2px 8px #000}
+.steps{font:600 clamp(9px,1.6vw,16px) system-ui,sans-serif;color:#e9ecff;margin-top:5%;line-height:1.55}
+.bottom{position:absolute;left:8%;right:8%;bottom:6%;text-align:center}
+.castle{font-size:clamp(23px,4vw,45px);line-height:1;color:#eed59b}
+.site{border-top:1px solid #b29760;border-bottom:1px solid #b29760;margin:2% auto 0;padding:2% 0;color:#e4eafa;font:600 clamp(10px,1.8vw,18px) Georgia,sans-serif;overflow-wrap:anywhere}
+.disclaimer{font:400 clamp(8px,1.2vw,12px) system-ui,sans-serif;color:#c5c5d8;letter-spacing:.02em;margin:2% 0 0}
+@media(max-width:480px){.poster{margin:12px auto;border-width:6px}.qr-frame{border-width:4px;border-radius:5px;box-shadow:0 0 0 2px #e4c885,0 0 0 5px #4e4662}.figure{border-width:2px}.mini{border-width:2px}.type-label{font-size:8px}.toolbar span{width:100%;text-align:center}}
+@page{size:A4 portrait;margin:0}
+@media print{body{background:white;-webkit-print-color-adjust:exact;print-color-adjust:exact}.toolbar{display:none}.poster{width:210mm;height:297mm;max-width:none;margin:0;border-width:3mm;box-shadow:none;page-break-inside:avoid}.title h1{font-size:13mm}.title p{font-size:5mm}.academy{font-size:3mm}.type-label{font-size:3.4mm}.callout{font-size:5.2mm}.steps{font-size:3.8mm}.site{font-size:3.4mm}.disclaimer{font-size:2.5mm}}
+</style></head>
+<body>
+<nav class="toolbar"><a href="./">返回 80 題人格測驗</a><button onclick="window.print()">列印 A4 海報</button><span>海報掃碼連結與測驗網站相同</span></nav>
+<main class="poster" role="img" aria-label="MBTI 16 型人格冒險學院 A4 掃碼海報，包含 ENFP 與 INTJ 角色和可掃描 QR Code">
+<div class="stars"></div><div class="academy">✦ M B T I　 A D V E N T U R E　 A C A D E M Y ✦</div>
+<header class="title"><h1>MBTI 16 型人格<br>冒險學院</h1><p>80 題冒險挑戰・探索你的專屬角色</p><div class="rule"></div></header>
+<div class="glyph g1" aria-hidden="true">✧</div><div class="glyph g2" aria-hidden="true">✦</div><div class="glyph g3" aria-hidden="true">⚜</div><div class="glyph g4" aria-hidden="true">✧</div>
+<figure class="figure enfp"><img src="assets/enfp-explorer.webp" alt="ENFP 探索家奇幻角色"><figcaption class="type-label">ENFP　靈感探索家</figcaption></figure>
+<figure class="figure intj"><img src="assets/intj-strategist.webp" alt="INTJ 策畫師奇幻角色"><figcaption class="type-label">INTJ　戰略策畫師</figcaption></figure>
+<div class="mini e"><img src="assets/enfp-explorer.webp" alt="ENFP 小肖像"></div><div class="mini i"><img src="assets/intj-strategist.webp" alt="INTJ 小肖像"></div>
+<section class="center" aria-label="掃碼開始測驗"><div class="qr-frame"><img src="assets/classroom-qr.png" alt="掃描進入 MBTI 16 型人格冒險學院" width="512" height="512"></div><div class="callout">✦　掃碼開啟冒險　✦</div><div class="steps">手機相機對準 QR Code<br>完成 80 題，解鎖專屬人格角色</div></section>
+<footer class="bottom"><div class="castle" aria-hidden="true">✧　♜　✧</div><div class="site">mikibear418.github.io/mbti-adventure-academy/</div><p class="disclaimer">課堂自我探索活動 · 非官方 MBTI 測驗 · 結果僅供學習與討論</p></footer>
+</main></body></html>
