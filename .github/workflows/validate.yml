@@ -1,0 +1,92 @@
+name: Validate MBTI Academy Website
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Verify questions, role cards, QR poster and JavaScript
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout website
+        uses: actions/checkout@v6
+      - name: Run site integrity checks
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const vm = require('node:vm');
+          const assert = require('node:assert/strict');
+
+          const html = fs.readFileSync('index.html', 'utf8');
+          const poster = fs.readFileSync('poster.html', 'utf8');
+
+          assert.match(html, /<html\s+lang="zh-Hant"/i, 'Traditional Chinese language attribute is missing');
+          assert.match(html, /<main\b[^>]*id="app"/i, 'Application container is missing');
+
+          const scripts = [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)];
+          assert.ok(scripts.length > 0, 'No executable JavaScript found');
+          scripts.forEach((entry, index) => {
+            new vm.Script(entry[1], { filename: 'index.html script #' + (index + 1) });
+          });
+
+          function jsonConst(name, nextName) {
+            const marker = 'const ' + name + '=';
+            const start = html.indexOf(marker);
+            assert.ok(start >= 0, 'Missing ' + name);
+            const begin = start + marker.length;
+            const end = html.indexOf(';\nconst ' + nextName + '=', begin);
+            assert.ok(end > begin, 'Cannot locate the end of ' + name);
+            return JSON.parse(html.slice(begin, end));
+          }
+
+          const questions = jsonConst('QUESTIONS', 'TYPES');
+          const types = jsonConst('TYPES', 'HERO_IMAGES');
+          const images = jsonConst('HERO_IMAGES', 'CHAPTERS');
+          assert.equal(questions.length, 80, 'Question bank must have 80 questions');
+
+          const axes = {EI: 0, SN: 0, TF: 0, JP: 0};
+          const chapters = Array(10).fill(0);
+          const kinds = {scale: 0, challenge: 0};
+          for (const [i, q] of questions.entries()) {
+            assert.ok(q.q && typeof q.q === 'string', 'Question ' + (i+1) + ' has no text');
+            assert.ok(Object.hasOwn(axes, q.axis), 'Question ' + (i+1) + ' has an invalid axis');
+            assert.ok(Object.hasOwn(kinds, q.kind), 'Question ' + (i+1) + ' has an invalid kind');
+            assert.ok(Number.isInteger(q.chapter) && q.chapter >= 0 && q.chapter < 10, 'Invalid chapter');
+            axes[q.axis]++;
+            chapters[q.chapter]++;
+            kinds[q.kind]++;
+            if (q.kind === 'scale') {
+              assert.ok(q.axis.includes(q.pol), 'Scale polarity mismatch at question ' + (i+1));
+            } else {
+              assert.equal(q.options?.length, 2, 'Challenge must have exactly 2 choices');
+              assert.deepEqual(new Set(q.options.map(choice => choice[1])), new Set(q.axis.split('')), 'Invalid challenge choices');
+            }
+          }
+          for (const [axis, count] of Object.entries(axes)) assert.equal(count, 20, axis + ' should have 20 questions');
+          chapters.forEach((count, i) => assert.equal(count, 8, 'Chapter ' + (i+1) + ' should have 8 questions'));
+          assert.deepEqual(kinds, {scale: 72, challenge: 8}, 'Question format counts do not match');
+
+          const expectedTypes = ['ISTJ','ISFJ','INFJ','INTJ','ISTP','ISFP','INFP','INTP','ESTP','ESFP','ENFP','ENTP','ESTJ','ESFJ','ENFJ','ENTJ'];
+          assert.deepEqual(Object.keys(types).sort(), expectedTypes.slice().sort(), 'Incorrect personality types');
+          assert.deepEqual(Object.keys(images).sort(), expectedTypes.slice().sort(), 'Missing personality card image');
+          expectedTypes.forEach(type => {
+            assert.ok(types[type].name && types[type].summary, type + ' is missing its character description');
+            assert.ok(images[type].startsWith('data:image/webp;base64,'), type + ' has an invalid artwork data URL');
+          });
+
+          const posterImages = [...poster.matchAll(/<img\b[^>]*\bsrc="([^"]+)"/gi)].map(match => match[1]);
+          assert.ok(posterImages.length >= 5, 'Poster appears incomplete');
+          posterImages.forEach(path => assert.ok(fs.existsSync(path), 'Poster image not found: ' + path));
+
+          const qr = fs.readFileSync('assets/classroom-qr.png');
+          assert.ok(qr.subarray(0,8).equals(Buffer.from('89504e470d0a1a0a', 'hex')), 'QR code is not PNG');
+          assert.ok(poster.includes('mikibear418.github.io/mbti-adventure-academy/'), 'Poster destination is wrong');
+
+          console.log('PASS: JavaScript syntax, 80 questions, 4 axes, 10 chapters, 16 role cards, poster assets and QR PNG.');
+          NODE
