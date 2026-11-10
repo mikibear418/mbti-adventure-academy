@@ -15,10 +15,10 @@ jobs:
           node <<'NODE'
           const fs = require('fs');
           const s=fs.readFileSync('index.html','utf8');
-          const stripped=s.replace(/data:image\\/[a-z0-9+.-]+;base64,[A-Za-z0-9+/=]+/gi,'[EMBEDDED IMAGE]');
+          const stripped=s.replace(new RegExp('data:image[^,]+,[A-Za-z0-9+/=]+','gi'),'[EMBEDDED IMAGE]');
           console.log('SOURCE_SIZE',s.length,'STRIPPED_SIZE',stripped.length);
           console.log('=== TOP HTML ===');
-          console.log(stripped.slice(0,10500));
-          console.log('=== END OF HTML (LAST 30000) ===');
-          console.log(stripped.slice(-30000));
+          console.log(stripped.slice(0,8500));
+          console.log('=== END OF HTML (LAST 35000) ===');
+          console.log(stripped.slice(-35000));
           NODE
