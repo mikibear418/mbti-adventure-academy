@@ -1,0 +1,18 @@
+/* Shared role-card selection UI for the 80-question academy and image gallery. */
+.gender-picker{display:block;max-width:670px;margin:21px 0 22px;padding:19px 19px 15px;border:1px solid #bfa578;border-radius:18px;background:linear-gradient(115deg,rgba(39,45,78,.92),rgba(27,38,67,.96));box-shadow:0 14px 35px rgba(7,10,29,.19);color:#f5ebd8}
+.gender-picker legend{padding:0 9px;color:#f6d794;font-weight:900;font-size:16px;letter-spacing:.02em}
+.gender-picker-options{display:flex;gap:9px;flex-wrap:wrap;margin-top:3px}
+.gender-picker-item{display:flex;position:relative;align-items:center;gap:6px;min-height:42px;border:1px solid #7982a5;background:#1d2948;color:#dae1f5;padding:8px 12px;border-radius:11px;cursor:pointer;font-size:14px;font-weight:700;transition:background .12s,border-color .12s}
+.gender-picker-item:hover{background:#303b61}
+.gender-picker-item.active{background:#594b67;border-color:#f0ce86;color:#ffe6ac;box-shadow:0 0 0 2px #eed29622 inset}
+.gender-picker-item input{accent-color:#edcb88;width:17px;height:17px;margin:0;cursor:pointer;flex-shrink:0}
+.gender-picker p{margin:12px 0 0;color:#c8d2e7;line-height:1.65;font-size:13px}
+.gender-picker.compact{padding:12px 15px 13px;margin:14px 0 22px;max-width:100%;border-radius:13px;box-shadow:none}
+.gender-picker.compact legend{font-size:13px}
+.gender-picker.compact .gender-picker-item{font-size:12px;padding:6px 10px;min-height:36px}
+.result-visual+.gender-picker{margin-top:15px}
+.gender-role-note{display:inline-block;margin-top:9px;padding:5px 12px;border-radius:99px;border:1px solid #e2c89488;color:#f9e0a1;font-size:12px;letter-spacing:.03em}
+.gallery .gender-picker{margin:6px 0 24px}
+.q-shell>.gender-picker{margin-top:0}
+@media(max-width:550px){.gender-picker{padding:14px 11px 12px}.gender-picker-options{gap:6px}.gender-picker-item{font-size:12px;padding:6px 8px;min-height:39px}.gender-picker.compact{padding:11px}.gender-picker.compact .gender-picker-item{padding:6px 7px;font-size:11px}.gender-picker legend{font-size:14px}}
+@media print{.gender-picker{display:none!important}.gender-role-note{color:#1a2639;border-color:#c6ac72}}
