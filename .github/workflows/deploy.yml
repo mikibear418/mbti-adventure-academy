@@ -23,6 +23,20 @@ jobs:
     steps:
       - name: Checkout site
         uses: actions/checkout@v6
+      - name: Attach gender-specific character artwork to the published page
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check assets/gender-cards.js
+          node <<'NODE'
+          const fs=require('node:fs');
+          const p='index.html', html=fs.readFileSync(p,'utf8');
+          const snippet='<link rel="stylesheet" href="./assets/gender-cards.css">\n<script defer src="./assets/gender-cards.js"></script>\n';
+          if(!html.includes('</body>'))throw Error('Cannot find HTML closing body tag');
+          if(html.includes('gender-cards.js'))throw Error('Role-card script was already injected into source');
+          fs.writeFileSync(p,html.replace('</body>',snippet+'</body>'));
+          console.log('Gender-card add-on inserted while retaining the 80 original questions.');
+          NODE
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
         with:
@@ -46,4 +60,10 @@ jobs:
           grep -q 'const QUESTIONS=' /tmp/mbti-home.html
           grep -q 'classroom-qr.png' /tmp/mbti-poster.html
           test "$(wc -c </tmp/mbti-classroom-qr.png)" -gt 1000
-          echo "PASS: Live 80-question website, printable QR poster and QR image are accessible."
+          curl -fLsS --retry 8 --retry-all-errors --retry-delay 4 --max-time 20 "$base/assets/gender-cards.js" -o /tmp/mbti-gender.js
+          curl -fLsS --retry 8 --retry-all-errors --retry-delay 4 --max-time 20 "$base/assets/gender-cards.css" -o /tmp/mbti-gender.css
+          grep -q 'gender-cards.js' /tmp/mbti-home.html
+          grep -q 'makePortrait' /tmp/mbti-gender.js
+          grep -q 'gender-picker' /tmp/mbti-gender.css
+          node --check /tmp/mbti-gender.js
+          echo "PASS: Live 80-question website, 32 gender role-card variants, poster and QR assets are accessible."
