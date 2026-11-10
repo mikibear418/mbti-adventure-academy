@@ -34,3 +34,16 @@ jobs:
       - name: Deploy website
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Verify published website is reachable
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="https://mikibear418.github.io/mbti-adventure-academy"
+          curl -fLsS --retry 8 --retry-all-errors --retry-delay 4 --max-time 20 "$base/" -o /tmp/mbti-home.html
+          curl -fLsS --retry 8 --retry-all-errors --retry-delay 4 --max-time 20 "$base/poster.html" -o /tmp/mbti-poster.html
+          curl -fLsS --retry 8 --retry-all-errors --retry-delay 4 --max-time 20 "$base/assets/classroom-qr.png" -o /tmp/mbti-classroom-qr.png
+          grep -q 'const QUESTIONS=' /tmp/mbti-home.html
+          grep -q 'classroom-qr.png' /tmp/mbti-poster.html
+          test "$(wc -c </tmp/mbti-classroom-qr.png)" -gt 1000
+          echo "PASS: Live 80-question website, printable QR poster and QR image are accessible."
