@@ -90,3 +90,48 @@ jobs:
 
           console.log('PASS: JavaScript syntax, 80 questions, 4 axes, 10 chapters, 16 role cards, poster assets and QR PNG.');
           NODE
+      - name: Validate gender picker and all 32 role-card portraits
+        shell: bash
+        run: |
+          node --check assets/gender-cards.js
+          node <<'NODE'
+          const fs=require('node:fs');
+          const vm=require('node:vm');
+          const assert=require('node:assert/strict');
+          const code=fs.readFileSync('assets/gender-cards.js','utf8');
+          const types=['ISTJ','ISFJ','INFJ','INTJ','ISTP','ISFP','INFP','INTP','ESTP','ESFP','ENFP','ENTP','ESTJ','ESFJ','ENFJ','ENTJ'];
+          const context={
+            HERO_IMAGES:Object.fromEntries(types.map(type=>[type,'original-'+type])),
+            state:{view:'home'},
+            render(){},
+            document:{querySelector(){return null},addEventListener(){}},
+            window:{},
+            sessionStorage:{getItem(){return null},setItem(){}},
+            module:{exports:{}}
+          };
+          vm.runInNewContext(code,context);
+          const {ORDER,makePortrait}=context.module.exports;
+          assert.equal(ORDER.length,16);
+          const seen=new Set();
+          for(const type of types){
+            const male=makePortrait(type,'male');
+            const female=makePortrait(type,'female');
+            assert.ok(male.startsWith('data:image/svg+xml'),type+' male SVG missing');
+            assert.ok(female.startsWith('data:image/svg+xml'),type+' female SVG missing');
+            assert.notEqual(male,female,type+' variants are identical');
+            for(const uri of [male,female]){
+              const svg=decodeURIComponent(uri.split(',')[1]);
+              assert.match(svg,/<svg\b[\s\S]*<\/svg>/,type+' invalid SVG wrapper');
+              assert.ok(svg.length>3500,'Artwork looks truncated');
+              seen.add(uri);
+            }
+          }
+          assert.equal(seen.size,32,'Expected 32 unique character portraits');
+          context.window.MBTIGenderCards.setGender('female');
+          assert.equal(context.HERO_IMAGES.ENFP,makePortrait('ENFP','female'));
+          context.window.MBTIGenderCards.setGender('male');
+          assert.equal(context.HERO_IMAGES.INTJ,makePortrait('INTJ','male'));
+          context.window.MBTIGenderCards.setGender('original');
+          assert.equal(context.HERO_IMAGES.ENFP,'original-ENFP');
+          console.log('PASS: 16 male, 16 female portraits; gender only affects artwork, original portraits preserved.');
+          NODE
