@@ -12,16 +12,18 @@
 - 測驗成績、80 題答案和四組偏好計分均與性別無關；切換只會更換圖像。
 - 完成測驗後，結果頁即時顯示所選形象，「下載角色卡 PNG」會將所選版本畫入卡片。
 - 本次頁籤選擇只存在瀏覽器的 sessionStorage，不上傳或收集性別資訊；重新開啟新頁籤時預設為原版。
-- 圖卡為本站新增的奇幻學院風格 SVG 插畫；原有 16 張 AI 插畫保留供「不指定（原版）」使用。
+- 男女圖卡採用 ImageGen 製作的奇幻學院金色典藏框 WebP 插畫；原有 16 張 AI 插畫仍供「不指定（原版）」使用。
 
 ## 網站檔案
 
 - `index.html`：保留原版 80 題、原有 16 人格說明、計分與 PNG 輸出，**不覆蓋原始題庫**。
-- `assets/gender-cards.js`：16 型、32 款男女對應 SVG 插畫與選擇邏輯。
+- `assets/gender-cards.js`：16 型、32 款男女對應 ImageGen WebP 圖卡與選擇邏輯。
 - `assets/gender-cards.css`：性別選擇器的電腦與手機響應式版面。
+- `assets/characters/`：32 張網站用 WebP 圖卡。
+- `assets/portraits/`：32 張直式典藏卡 WebP 圖片。
 - `poster.html`：課堂掃碼海報，可使用瀏覽器「列印 A4」。
 - `assets/`：原有 ENFP、INTJ 圖像及已驗證的課堂 QR Code。
-- `.github/workflows/validate.yml`：檢查原版 80 題、16 型人格，以及新增 32 張圖像與切換邏輯。
+- `.github/workflows/validate.yml`：檢查原版 80 題、16 型人格，以及新增 32 張 WebP 圖像與切換邏輯。
 - `.github/workflows/deploy.yml`：發布時把性別介面載入原版 HTML，並檢查公開網站。
 
 ## GitHub Pages 設定
@@ -29,3 +31,7 @@
 若 GitHub Actions 顯示 `Create Pages site failed` 或 `Get Pages site failed`，在儲存庫的 **Settings → Pages → Build and deployment → Source** 選 **GitHub Actions**。然後在 Actions 重跑「Publish MBTI Adventure Academy」，或推送更新到 `main`。
 
 > 本網站為教學自我探索用途，非官方 MBTI 心理衡鑑；不能用來診斷、分班或評斷個人能力。性別角色形象是藝術選項，不是人格特質或性別能力的判斷。
+
+## ImageGen 角色圖更新
+
+此分支的程式碼已改為從 `assets/characters/{TYPE}-{male|female}.webp` 讀取男女圖片，並保留原版 80 題和 16 張原始圖卡。圖片須與程式碼一起提交後才能合併到 `main`，否則切換男女形象會出現缺圖。
