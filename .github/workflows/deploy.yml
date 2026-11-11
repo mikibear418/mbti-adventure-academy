@@ -38,12 +38,19 @@ jobs:
         run: |
           set -euo pipefail
           node --check assets/gender-cards.js
+          node --check assets/student-mode.js
           node <<'NODE'
           const fs=require('node:fs');
-          const p='index.html', html=fs.readFileSync(p,'utf8');
-          const snippet='<link rel="stylesheet" href="./assets/gender-cards.css">\n<script defer src="./assets/gender-cards.js"></script>\n';
+          const p='index.html'; let html=fs.readFileSync(p,'utf8');
+          const snippet='<link rel="stylesheet" href="./assets/gender-cards.css">\n<script defer src="./assets/gender-cards.js"></script>\n<link rel="stylesheet" href="./assets/student-mode.css">\n<script defer src="./assets/student-mode.js"></script>\n';
           if(!html.includes('</body>'))throw Error('Cannot find HTML closing body tag');
           if(html.includes('gender-cards.js'))throw Error('Role-card script was already injected into source');
+          const nav=/<nav class="nav">[\s\S]*?<\/nav>/;
+          if(!nav.test(html))throw Error('Could not locate student navigation');
+          html=html.replace(nav,'<nav class="nav"><button onclick="startQuiz()">開始測驗</button></nav>');
+          const homeExtra='${gallerySection(8)}${teacherSummary()}';
+          if(!html.includes(homeExtra))throw Error('Could not locate educator/gallery section in home');
+          html=html.replace(homeExtra,'');
           fs.writeFileSync(p,html.replace('</body>',snippet+'</body>'));
           console.log('Gender-card add-on inserted while retaining the 80 original questions.');
           NODE
@@ -75,6 +82,11 @@ jobs:
           grep -q 'gender-cards.js' /tmp/mbti-home.html
           grep -q 'makePortrait' /tmp/mbti-gender.js
           grep -q 'gender-picker' /tmp/mbti-gender.css
+          curl -fLsS --retry 8 --retry-all-errors --retry-delay 4 --max-time 20 "$base/assets/student-mode.js" -o /tmp/mbti-student.js
+          curl -fLsS --retry 8 --retry-all-errors --retry-delay 4 --max-time 20 "$base/assets/student-mode.css" -o /tmp/mbti-student.css
+          grep -q 'student-mode.js' /tmp/mbti-home.html
+          grep -q 'downloadFullRoleReport' /tmp/mbti-student.js
+          node --check /tmp/mbti-student.js
           node --check /tmp/mbti-gender.js
           for card in INTJ-male ENFP-female INFJ-male ESFP-female; do
             curl -fLsS --retry 8 --retry-all-errors --retry-delay 4 --max-time 20 "$base/assets/characters/$card.webp" -o "/tmp/$card.webp"

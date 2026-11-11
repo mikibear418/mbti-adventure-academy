@@ -25,6 +25,20 @@ jobs:
           test -s assets/characters/INTJ-female.webp
           test -s assets/characters/ENFP-male.webp
           test -s assets/characters/ENFP-female.webp
+      - name: Verify student-only interface and full report download
+        shell: bash
+        run: |
+          node --check assets/student-mode.js
+          node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict');
+          const js=fs.readFileSync('assets/student-mode.js','utf8');
+          const css=fs.readFileSync('assets/student-mode.css','utf8');
+          for(const phrase of ['downloadFullRoleReport','開始 80 題性格探索','角色卡＋完整結果說明','showTeacher=function(){setView(\'home\')','showGallery=function(){setView(\'home\')'])
+            assert.ok(js.includes(phrase),'Student-only feature missing: '+phrase);
+          assert.ok(css.includes('.result-layout{display:flex!important'),'Result must stack vertically');
+          assert.ok(css.includes('data-student-view="home"'),'Home must be student-only');
+          console.log('PASS: student-only home, no teacher/gallery menu and downloadable full PNG report.');
+          NODE
       - name: Run site integrity checks
         shell: bash
         run: |
