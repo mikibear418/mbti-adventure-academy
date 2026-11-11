@@ -34,4 +34,15 @@
 
 ## ImageGen 角色圖更新
 
-此分支的程式碼已改為從 `assets/characters/{TYPE}-{male|female}.webp` 讀取男女圖片，並保留原版 80 題和 16 張原始圖卡。圖片須與程式碼一起提交後才能合併到 `main`，否則切換男女形象會出現缺圖。
+此分支的程式碼已改為從 `assets/characters/{TYPE}-{male|female}.webp` 讀取男女圖片，並保留原版 80 題和 16 張原始圖卡。圖片可透過單一 ZIP 上傳：GitHub Actions 會在部署時自動解壓。必須先將 ZIP 提交至這個更新分支，再合併到 `main`。
+
+### 最簡單的手機部署方式（只需上傳一個 ZIP）
+
+此版本的 GitHub Actions 已支援從套件 ZIP 自動解壓圖片及程式，不需要在手機上逐張上傳 64 張 WebP。
+
+1. 下載 `MBTI_32_ImageGen_Character_Cards_GitHub_Ready.zip`，**不要解壓縮**。
+2. 在 GitHub 切到 `imagegen-32-character-cards` 分支，在儲存庫根目錄選 `Add file → Upload files`，上傳 ZIP 原檔；確認 Commit 至該分支。
+3. 發起 Pull request，把 `imagegen-32-character-cards` 合併至 `main`。
+4. GitHub Actions 的驗證及發佈工作會在執行時從 ZIP 提取 `assets/characters/`、`assets/portraits/`、`assets/gender-cards.js` 和檢查程式，再發佈到 GitHub Pages。
+
+**注意：** 工作流程要求 ZIP 必須放在儲存庫根目錄，且檔案名稱完全相同；它不會把 ZIP 自身直接當網站圖片使用。
