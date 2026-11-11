@@ -15,6 +15,16 @@ jobs:
     steps:
       - name: Checkout website
         uses: actions/checkout@v6
+      - name: Expand ImageGen role-card upload
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s MBTI_32_ImageGen_Character_Cards_GitHub_Ready.zip
+          unzip -q -o "MBTI_32_ImageGen_Character_Cards_GitHub_Ready.zip" 'assets/characters/*' 'assets/portraits/*' 'assets/gender-cards.js' 'tests/verify-imagegen.cjs'
+          test -s assets/characters/INTJ-male.webp
+          test -s assets/characters/INTJ-female.webp
+          test -s assets/characters/ENFP-male.webp
+          test -s assets/characters/ENFP-female.webp
       - name: Run site integrity checks
         shell: bash
         run: |
