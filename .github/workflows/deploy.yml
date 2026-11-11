@@ -76,4 +76,9 @@ jobs:
           grep -q 'makePortrait' /tmp/mbti-gender.js
           grep -q 'gender-picker' /tmp/mbti-gender.css
           node --check /tmp/mbti-gender.js
-          echo "PASS: Live 80-question website, 32 gender role-card variants, poster and QR assets are accessible."
+          for card in INTJ-male ENFP-female INFJ-male ESFP-female; do
+            curl -fLsS --retry 8 --retry-all-errors --retry-delay 4 --max-time 20 "$base/assets/characters/$card.webp" -o "/tmp/$card.webp"
+            test "$(wc -c <"/tmp/$card.webp")" -gt 12000
+            test "$(head -c 4 "/tmp/$card.webp")" = "RIFF"
+          done
+          echo "PASS: Published 80-question website, original art, gender selector, sampled ImageGen WebP cards, poster and QR."
